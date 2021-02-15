@@ -13,12 +13,9 @@ Movies.init({
     cover_url: { type: DataTypes.STRING },
     movie_url: { type: DataTypes.STRING },
     }, {
-    sequelize, // We need to pass the connection instance
-    modelName: 'Movies', // We need to choose the model name
+    sequelize,
+    modelName: 'Movies',
     timestamps: true,
 });
-
-// the defined model is the class itself
-console.log(Movies === sequelize.models.Movies); // true
 
 export default Movies;

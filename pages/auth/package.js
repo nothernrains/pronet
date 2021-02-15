@@ -4,6 +4,10 @@ import Footer from '../../components/frontend/layouts/footer';
 
 import { useRouter } from 'next/router';
 
+import React, { useState } from 'react';
+
+import axios from 'axios';
+
 const Package = () => {
 
     const router = useRouter();
@@ -29,7 +33,7 @@ const Package = () => {
                                 <Card.Body>
                                     <Card.Title>Standard Package</Card.Title>
                                     <Card.Text>
-                                        <h1 class="card-title pricing-card-title">R39 <small class="text-muted">/ mo</small></h1>
+                                        <h1 className="card-title pricing-card-title">R39 <small className="text-muted">/ mo</small></h1>
                                         <ListGroup>
                                             <ListGroup.Item>Devices 2</ListGroup.Item>
                                             <ListGroup.Item>TV Shows unlimited</ListGroup.Item>
@@ -49,7 +53,7 @@ const Package = () => {
                                 <Card.Body>
                                     <Card.Title>Full Package</Card.Title>
                                     <Card.Text>
-                                        <h1 class="card-title pricing-card-title">R69 <small class="text-muted">/ mo</small></h1>
+                                        <h1 className="card-title pricing-card-title">R69 <small className="text-muted">/ mo</small></h1>
                                         <ListGroup>
                                             <ListGroup.Item>Devices unlimited</ListGroup.Item>
                                             <ListGroup.Item>TV Shows unlimited</ListGroup.Item>
