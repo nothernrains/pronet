@@ -1,5 +1,7 @@
 import nextConnect from 'next-connect';
 import bcrypt from 'bcrypt';
+import fs from 'fs';
+const jwt = require("jsonwebtoken");
 
 import Users from '../../../../models/Users';
 
@@ -29,24 +31,20 @@ createUserApiRoute.post( async ( req, res ) => {
     });
 
     if ( saveUser ) {
-        res.status(200).json({ success: true, message: 'Account created successfully' });
+
+        const user = await Users.findOne({ where: { email } });
+
+        const privateKey = fs.readFileSync('keys/jwtRS256.key');
+        const token = await jwt.sign({ user }, privateKey, { algorithm: 'RS256' });
+
+        res.status(200).json({ success: true, message: 'Account created successfully', user, token });
+
     } else {
-        res.status(200).json({ success: false, message: 'Failed to create account' });
+
+        res.status(400).json({ success: false, message: 'Failed to create account' });
+
     }
 
-    
-
-});
-
-createUserApiRoute.get( async ( req, res ) => {
-    const movies = await Movies.findAll();
-    res.status(200).json({ movies });
 });
 
 export default createUserApiRoute;
-
-export const config = {
-    api: {
-        bodyParser: true, // Disallow body parsing, consume as stream
-    },
-};

@@ -38,24 +38,23 @@ const Register = () => {
         setIsValiPassword( password.length >= 4 );
         setIsValidConfirmPassword(password === confirmPassword);
 
-        console.log(isValidEmail, isValidName,isValidSurname, isValidPhoneNumber, isValidPassword, isValidConfirmPassword)
-
         if (isValidEmail && isValidName && isValidSurname && isValidPhoneNumber && isValidPassword && isValidConfirmPassword ) {
-            const createAccount = await axios.post(`${process.env.APP_URL}/api/v1/users/create`, {
+            
+            const createAccount = await axios.post(`/api/v1/users/create`, {
                 name, surname, email, phoneNumber, password
             });
 
             setIsAccountCreated(createAccount.data.success);
 
             if ( createAccount.data.success ) {
+                const user = createAccount.data.user;
+                localStorage.setItem('user', JSON.stringify(user));
+                localStorage.setItem('token', createAccount.data.token);
                 router.replace('/auth/package', null);
             }
-
-            console.log('createAccount', createAccount.data);
         } else {
             setIsAccountCreated(false);
             setIsAccountCreationError(true);
-            console.log('validate form');
         }
 
     }

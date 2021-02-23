@@ -1,9 +1,9 @@
 import nextConnect from 'next-connect';
 import bcrypt from 'bcrypt';
 
-import Users from '../../../models/Users';
+import Users from '../../../../models/Users';
 
-const createUserApiRoute = nextConnect({
+const authApiRoute = nextConnect({
 
     onError(error, req, res) {
         console.error('error', error);
@@ -16,37 +16,25 @@ const createUserApiRoute = nextConnect({
 });
 
 
-createUserApiRoute.post( async ( req, res ) => {
+authApiRoute.post( async ( req, res ) => {
 
-    const { name, surname, email, phoneNumber, password } = req.body;
+    const { email, password } = req.body;
 
-    const saltRounds = 10;
-    const salt = await bcrypt.genSaltSync(saltRounds);
-    const hashedPassword = await bcrypt.hashSync(password, salt);
+    const user = await Users.findOne({ where: { email } });
 
-    const saveUser = await Users.create({
-        name, surname, email, phoneNumber, password: hashedPassword, userRole: 1,
-    });
+    if ( user ) {
+        const match = await bcrypt.compare(password, user.password);
 
-    if ( saveUser ) {
-        res.status(200).json({ success: true, message: 'Account created successfully' });
-    } else {
-        res.status(200).json({ success: false, message: 'Failed to create account' });
+        if (match) {
+            res.status(200).json({ success: true, message: 'Successfully logged in' });
+        } else {
+            res.status(401).json({ success: true, message: 'Failed to login' });
+        }
     }
 
-    
+    res.status(401).json({ success: false, message: 'Failed to login' });
 
 });
 
-createUserApiRoute.get( async ( req, res ) => {
-    const movies = await Movies.findAll();
-    res.status(200).json({ movies });
-});
 
-export default createUserApiRoute;
-
-export const config = {
-    api: {
-        bodyParser: false, // Disallow body parsing, consume as stream
-    },
-};
+export default authApiRoute;

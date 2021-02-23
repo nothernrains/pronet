@@ -1,18 +1,20 @@
+// UserPaymentInfos
+
 import sequelize from '../utils/dbConnection';
 
 import { DataTypes, Model } from 'sequelize';
 
 
-class UserPackages extends Model {}
+class UserPayments extends Model {}
 
-UserPackages.init({
+UserPayments.init({
     id: { type: DataTypes.NUMBER, primaryKey: true, },
     user_id: { type: DataTypes.NUMBER, },
-    package_id: { type: DataTypes.NUMBER, },
+    month: { type: DataTypes.STRING, },
     }, {
     sequelize,
-    modelName: 'user_packages',
+    modelName: 'user_payments',
     timestamps: false,
 });
 
-export default UserPackages;
+export default UserPayments;

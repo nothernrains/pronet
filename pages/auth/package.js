@@ -4,7 +4,7 @@ import Footer from '../../components/frontend/layouts/footer';
 
 import { useRouter } from 'next/router';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import axios from 'axios';
 
@@ -12,8 +12,25 @@ const Package = () => {
 
     const router = useRouter();
 
-    const gotoPackage = () => {
-        router.replace('/auth/payment', null);
+    const gotoPackage = async (selectedPackage) => {
+
+        const user = JSON.parse(localStorage.getItem('user'));
+
+        const config = {
+            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        };
+        
+        const linkPackage = await axios.post(`/api/v1/packages/create`, {
+            package_id: selectedPackage,
+        }, config);
+
+        if ( linkPackage.data.success ) {
+
+            localStorage.setItem('package', selectedPackage);
+            router.replace('/auth/payment', null);
+
+        }
+
 	};
 
     return (
@@ -41,7 +58,7 @@ const Package = () => {
                                             <ListGroup.Item>Support none</ListGroup.Item>
                                         </ListGroup>
                                     </Card.Text>
-                                    <Button variant="dark" size="lg" block type="button" onClick={ () => gotoPackage() }>Pick</Button>
+                                    <Button variant="dark" size="lg" block type="button" onClick={ () => gotoPackage(1) }>Pick</Button>
                                 </Card.Body>
                             </Card>
 
@@ -61,7 +78,7 @@ const Package = () => {
                                             <ListGroup.Item>Support unlimited</ListGroup.Item>
                                         </ListGroup>
                                     </Card.Text>
-                                    <Button variant="dark" size="lg" block type="button" onClick={ () => gotoPackage() }>Pick</Button>
+                                    <Button variant="dark" size="lg" block type="button" onClick={ () => gotoPackage(2) }>Pick</Button>
                                 </Card.Body>
                             </Card>
 
