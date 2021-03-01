@@ -34,9 +34,3 @@ movieApiRoute.get( async ( req, res ) => {
 });
 
 export default movieApiRoute;
-
-export const config = {
-    api: {
-        bodyParser: false, // Disallow body parsing, consume as stream
-    },
-};

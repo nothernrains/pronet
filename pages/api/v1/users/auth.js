@@ -1,5 +1,7 @@
 import nextConnect from 'next-connect';
 import bcrypt from 'bcrypt';
+import fs from 'fs';
+const jwt = require("jsonwebtoken");
 
 import Users from '../../../../models/Users';
 
@@ -26,13 +28,15 @@ authApiRoute.post( async ( req, res ) => {
         const match = await bcrypt.compare(password, user.password);
 
         if (match) {
-            res.status(200).json({ success: true, message: 'Successfully logged in' });
+            const privateKey = fs.readFileSync('keys/jwtRS256.key');
+            const token = await jwt.sign({ user }, privateKey, { algorithm: 'RS256' });
+            res.status(200).json({ success: true, message: 'Successfully logged in', token, user });
         } else {
-            res.status(401).json({ success: true, message: 'Failed to login' });
+            res.status(404).json({ success: true, message: 'Account not found' });
         }
     }
 
-    res.status(401).json({ success: false, message: 'Failed to login' });
+    res.status(400).json({ success: false, message: 'Failed to login, invalid credentials' });
 
 });
 

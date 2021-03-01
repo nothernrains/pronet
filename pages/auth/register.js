@@ -23,7 +23,7 @@ const Register = () => {
     const [isValidName, setIsValiName] = useState(true);
     const [isValidSurname, setIsValiSurname] = useState(true);
     const [isValidPhoneNumber, setIsValiPhoneNumber] = useState(true);
-    const [isValidPassword, setIsValiPassword] = useState('');
+    const [isValidPassword, setIsValiPassword] = useState(false);
     const [isValidConfirmPassword, setIsValidConfirmPassword] = useState(true);
 
     const [isAccountCreationError, setIsAccountCreationError] = useState(false);
